@@ -1,4 +1,4 @@
-package client;
+package client.gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel {
+public class BoardPanel extends JPanel {
 
 	private GameBoard gameBoard;
 	private int fontSize;
@@ -25,7 +25,7 @@ public class GamePanel extends JPanel {
 	private int currentColumn;
 	private int currentRow;
 
-	public GamePanel() {
+	public BoardPanel() {
 		this.setPreferredSize(new Dimension(600, 600));
 		this.gameBoard = new GameBoard(20, 20);
 		this.addMouseListener(new GamePanelMouseAdapter());
@@ -36,7 +36,7 @@ public class GamePanel extends JPanel {
 		this.fontSize = 18;
 	}
 
-	public GamePanel(GameBoard gameBoard) {
+	public BoardPanel(GameBoard gameBoard) {
 		this.setPreferredSize(new Dimension(600, 600));
 		this.gameBoard = gameBoard;
 		this.addMouseListener(new GamePanelMouseAdapter());

@@ -3,6 +3,8 @@ package server;
 import java.util.ArrayList;
 import java.util.List;
 
+import common.GameBoard;
+
 public class GameThread extends Thread {
 
 	private static GameThread instance;

@@ -12,8 +12,13 @@ import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
+
+import common.GameBoard;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 @SuppressWarnings("serial")
 public class BoardPanel extends JPanel {
@@ -94,12 +99,11 @@ public class BoardPanel extends JPanel {
 		}
 	}
 
-	public boolean messageFromNumActionListener(String buttonValue) {
-		if (currentRow != -1 && currentColumn != -1) {
-			if (gameBoard.makeMove(currentRow, currentColumn, buttonValue)) {
-				repaint();
-				return false;
-			}
+	public boolean messageFromActionListener(String value) {
+		if (gameBoard.makeMove(currentRow, currentColumn, value)) {
+			repaint();
+			MainFrame.getInstance().generateButton(gameBoard.getWord(currentRow, currentColumn));
+			return false;
 		}
 		return true;
 	}
@@ -108,7 +112,18 @@ public class BoardPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JButton jButton = ((JButton) e.getSource());
-			jButton.setVisible(messageFromNumActionListener(jButton.getText()));
+			jButton.setVisible(messageFromActionListener(jButton.getText()));
+		}
+	}
+
+	public class ComboBoxActionListener implements ActionListener {
+		@SuppressWarnings("unchecked")
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JComboBox<String> jComboBox = (JComboBox<String>) e.getSource();
+			if (messageFromActionListener((String) jComboBox.getSelectedItem())) {
+				showMessageDialog(null, "Tile invalid");
+			}
 		}
 	}
 

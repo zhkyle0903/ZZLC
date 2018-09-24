@@ -40,14 +40,12 @@ public class Server {
 		} catch (BindException e) {
 			System.out.println("Port " + port + " already in use (Bind failed)");
 		} catch (Exception e) {
-			// System.out.println(e.toString());
 			e.printStackTrace();
 		} finally {
 			if (serverSocket != null) {
 				try {
 					serverSocket.close();
 				} catch (IOException e) {
-					// System.out.println(e.toString());
 					e.printStackTrace();
 				}
 			}

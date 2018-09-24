@@ -7,6 +7,8 @@ public class GameThread extends Thread {
 
 	private static GameThread instance;
 	private List<ClientConnection> clients;
+	private GameBoard gameBoard;
+	private ClientConnection currentPlayer;
 
 	private boolean status;
 
@@ -34,11 +36,8 @@ public class GameThread extends Thread {
 
 	@Override
 	public synchronized void run() {
-		if (!status) {
-			// do something (Game start)
-		} else {
-			// already started
-		}
+		this.status = true;
+		// do something (Game start)
 	}
 
 	public boolean getStatus() {
@@ -47,5 +46,21 @@ public class GameThread extends Thread {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+
+	public GameBoard getGameBoard() {
+		return gameBoard;
+	}
+
+	public void setGameBoard(GameBoard gameBoard) {
+		this.gameBoard = gameBoard;
+	}
+
+	public ClientConnection getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setCurrentPlayer(ClientConnection currentPlayer) {
+		this.currentPlayer = currentPlayer;
 	}
 }

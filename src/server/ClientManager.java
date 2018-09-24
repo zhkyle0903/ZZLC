@@ -28,7 +28,14 @@ public class ClientManager {
 		connectedClients.remove(clientConnection);
 	}
 
-	public synchronized void processMessage(String msg) {
+	public synchronized void broadcast(String msg, List<ClientConnection> clients) {
+		// Broadcast the client message to all the clients connected to the server
+		for (ClientConnection clientConnection : clients) {
+			clientConnection.write(msg);
+		}
+	}
+
+	public synchronized void broadcastToAll(String msg) {
 		// Broadcast the client message to all the clients connected to the server
 		for (ClientConnection clientConnection : connectedClients) {
 			clientConnection.write(msg);

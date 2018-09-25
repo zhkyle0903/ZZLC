@@ -81,7 +81,7 @@ public class ClientConnection {
 		return false;
 	}
 	
-	public boolean refreshUserList() throws JSONException, IOException, SocketException{
+	public boolean refreshUserlist() throws JSONException, IOException, SocketException{
 		JsonUtil jsonUtil = new JsonUtil();
 		JSONObject dataJson = new JSONObject();
 		JSONObject refreshPack = jsonUtil.parse(Constants.REFRESH, dataJson);

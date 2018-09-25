@@ -52,14 +52,27 @@ public class LoginPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				//create a json package containing request type and username
 				String username = usernameEntry.getText();
-				try {
-				if(ClientConnection.getInstance().tryToLogin(username)==true)
-					MainFrame.getInstance().login();
+				if(isValidUsername(username)==true) {
+					try {
+						if(ClientConnection.getInstance().tryToLogin(username)==true) {
+							MainFrame.getInstance().login();
+						}
+						else
+						{
+							ErrorFrame errorWindow = new ErrorFrame("Login Failed: Username is already being used.");
+							errorWindow.setVisible(true);
+						}
+					}
+						catch(JSONException | IOException e1)
+						{
+							e1.printStackTrace();
+							ErrorFrame errorWindow = new ErrorFrame(e1.toString());
+							errorWindow.setVisible(true);
+						}
 				}
-				catch(JSONException | IOException e1)
+				else
 				{
-					e1.printStackTrace();
-					ErrorFrame errorWindow = new ErrorFrame(e1.toString());
+					ErrorFrame errorWindow = new ErrorFrame("Username invalid.");
 					errorWindow.setVisible(true);
 				}
 			}
@@ -74,4 +87,12 @@ public class LoginPanel extends JPanel {
 		});
 	}
 
+	public boolean isValidUsername(String username) {
+		for(int i=0;i<username.length();i++)
+		{
+			if(Character.isDigit(username.charAt(i))||Character.isLetter(username.charAt(i))==false)
+				return false;
+		}
+		return true;
+	}
 }

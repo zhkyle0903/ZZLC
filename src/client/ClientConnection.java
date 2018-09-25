@@ -110,4 +110,13 @@ public class ClientConnection {
 	public BufferedWriter getWriter() {
 		return writer;
 	}
+	
+	public JSONObject[] getUserlist() {
+		return userlist;
+	}
+	
+	public void setUserlist(JSONObject [] userlist) {
+		this.userlist = userlist;
+	}
+	
 }

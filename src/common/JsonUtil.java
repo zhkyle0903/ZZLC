@@ -20,6 +20,7 @@ public class JsonUtil {
 		return result;
 	}
 
+
 	public String getType(String jsonString) {
 		JSONObject jsonObject = new JSONObject(jsonString);
 		return jsonObject.getString(Constants.TYPE);
@@ -29,4 +30,5 @@ public class JsonUtil {
 		JSONObject jsonObject = new JSONObject(jsonString);
 		return (JSONObject) jsonObject.get(Constants.DATA);
 	}
+
 }

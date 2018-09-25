@@ -12,7 +12,7 @@ public class Server {
 	public static void main(String[] args) {
 		// Bind a port
 		if (args.length == 0) {
-			port = 8888;
+			port = 8100;
 		} else if (args.length == 1) {
 			try {
 				port = Integer.parseInt(args[0]);
@@ -40,12 +40,14 @@ public class Server {
 		} catch (BindException e) {
 			System.out.println("Port " + port + " already in use (Bind failed)");
 		} catch (Exception e) {
+			// System.out.println(e.toString());
 			e.printStackTrace();
 		} finally {
 			if (serverSocket != null) {
 				try {
 					serverSocket.close();
 				} catch (IOException e) {
+					// System.out.println(e.toString());
 					e.printStackTrace();
 				}
 			}

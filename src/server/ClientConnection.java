@@ -55,17 +55,21 @@ public class ClientConnection extends Thread {
 				// Logical processing based on request type
 				JSONObject msg = new JSONObject(clientMsg);
 				String type = msg.getString(Constants.TYPE);
+				JSONObject jsonData = jsonUtil.getData(clientMsg);
 				switch (type) {
 				case Constants.LOGIN:
-					// Sample 1 : not use Util
-					JSONObject sample1 = (JSONObject) msg.get(Constants.DATA);
-					// Sample 2 : use Util
-					JSONObject sample2 = jsonUtil.getData(clientMsg);
-					
 					// Set name
-					this.setClientName(sample1.getString(Constants.USERNAME));
-					// do something
+					if(loginOperation(jsonData)==true)
+						System.out.println(this.clientName+" has joined the lobby.");
+					else
+						System.out.println(Thread.currentThread().getName()
+								+" tried to log in with a duplicate username");
 					break;
+				case Constants.REFRESH:
+					//sent a list of online user
+					sendUserList();
+					break;
+					
 				case Constants.STARTGAME:
 					// do something
 					break;
@@ -103,10 +107,20 @@ public class ClientConnection extends Thread {
 		return clientName;
 	}
 
-	private void setClientName(String clientName) {
+	private boolean setClientName(String clientName) {
 		// check name, keep unique
-		this.clientName = clientName;
+		boolean unique = true;
+		for(ClientConnection connectedClients :ClientManager.getInstance().getConnectedClients())
+		{
+			String otherName = connectedClients.getClientName();
+			if(clientName.equals(otherName))
+				unique = false;
+		}
+		if(unique==true)
+			this.clientName = clientName;
+		return unique;
 	}
+
 
 	public boolean getStatus() {
 		return status;
@@ -122,5 +136,54 @@ public class ClientConnection extends Thread {
 
 	public void setClientCount(int clientCount) {
 		this.clientCount = clientCount;
+	}
+	
+	public boolean loginOperation(JSONObject loginData) throws JSONException, IOException, SocketException {
+		JsonUtil jsonUtil = new JsonUtil();
+		JSONObject replyPack = new JSONObject();
+		JSONObject dataJson = new JSONObject();
+		if(this.setClientName(loginData.getString(Constants.USERNAME))==true)
+		{
+			dataJson.put(Constants.ISUNIQUE, true);
+			replyPack = jsonUtil.parse(Constants.LOGIN, dataJson);
+			String jsonString = replyPack.toString();
+			write(jsonString);
+			//broadcast
+			return true;
+		}
+		else
+		{
+			dataJson.put(Constants.ISUNIQUE, false);
+			replyPack = jsonUtil.parse(Constants.LOGIN, dataJson);
+			String jsonString = replyPack.toString();
+			write(jsonString);
+			return false;
+		}
+	}
+	
+	public void sendUserList() throws JSONException, IOException, SocketException {
+		//send the list of connected users whose name is not null
+		JSONObject [] userList = new JSONObject[ClientManager.getInstance().getConnectedClients().size()];
+		JsonUtil jsonUtil = new JsonUtil();
+		JSONObject userListPack = new JSONObject();
+		JSONObject dataJson = new JSONObject();
+		int i =0;
+		for(ClientConnection connectedClients :ClientManager.getInstance().getConnectedClients())
+		{
+			String playerName = connectedClients.getClientName();
+			if(playerName!=null)
+			{
+				boolean status = connectedClients.getStatus();
+				JSONObject nameAndStatus = new JSONObject();
+				nameAndStatus.put(playerName, status);
+				userList[i] = nameAndStatus;
+				i++;
+			}
+		}
+		dataJson.put(Constants.USERLIST, userList);
+		userListPack = jsonUtil.parse(Constants.REFRESH, dataJson);
+		String jsonString = userListPack.toString();
+		write(jsonString);
+		System.out.println("List sent complete");
 	}
 }

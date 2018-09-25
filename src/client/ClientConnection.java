@@ -7,6 +7,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.net.SocketException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import common.JsonUtil;
+import common.Constants;
 
 public class ClientConnection {
 
@@ -14,7 +21,9 @@ public class ClientConnection {
 	private Socket client;
 	private BufferedReader reader;
 	private BufferedWriter writer;
-
+	private String serverMsg;
+	private JSONObject[] userlist;
+	
 	private ClientConnection() {
 	}
 
@@ -52,6 +61,42 @@ public class ClientConnection {
 			}
 		}
 		return false;
+	}
+	
+	public boolean tryToLogin(String username) throws JSONException, IOException, SocketException{
+		JsonUtil jsonUtil = new JsonUtil();
+		JSONObject dataJson = new JSONObject();
+		dataJson.put(Constants.USERNAME, username);
+		JSONObject loginPack = jsonUtil.parse(Constants.LOGIN, dataJson);
+		String jsonString = loginPack.toString();
+		if(sendMsg(jsonString)==true){
+			String type = jsonUtil.getType(serverMsg=reader.readLine());
+			if(type.equals(Constants.LOGIN)){
+				if((boolean)jsonUtil.getData(serverMsg).get(Constants.ISUNIQUE)==true)
+					return true;
+				else
+					return false;
+			}
+		}
+		return false;
+	}
+	
+	public boolean refreshUserList() throws JSONException, IOException, SocketException{
+		JsonUtil jsonUtil = new JsonUtil();
+		JSONObject dataJson = new JSONObject();
+		JSONObject refreshPack = jsonUtil.parse(Constants.REFRESH, dataJson);
+		String jsonString = refreshPack.toString();
+		if(sendMsg(jsonString)==true) {
+			if(jsonUtil.getType(serverMsg=reader.readLine()).equals(Constants.REFRESH)){
+				userlist = (JSONObject[]) jsonUtil.getData(serverMsg).get(Constants.USERLIST);
+				return true;
+			}
+			else 
+				return false;
+		}
+		else
+			return false;
+		
 	}
 
 	public Socket getClient() {

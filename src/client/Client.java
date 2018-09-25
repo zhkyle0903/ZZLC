@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 
 import client.config.Config;
 import client.config.ConfigLoader;
+import client.gui.ErrorFrame;
 import client.gui.MainFrame;
 
 public class Client {
@@ -31,8 +32,10 @@ public class Client {
 				System.exit(0);
 			}
 		} else {
-			System.out.println("Unknown parameters");
-			System.exit(0);
+			String errorMsg ="Unknown parameters";
+			System.out.println("errorMsg");
+			ErrorFrame error = new ErrorFrame(errorMsg);
+			error.setVisible(true);
 		}
 		try {
 			// Establish the connection
@@ -40,19 +43,26 @@ public class Client {
 			client.connect(new InetSocketAddress(ip, port), 10000);
 			ClientConnection.getInstance().clientConnected(client);
 			MainFrame.getInstance().setVisible(true);
-
 		} catch (UnknownHostException e) {
-			System.out.println("Unknown host: " + ip);
-			System.exit(0);
+			String errorMsg = "Unknown host: " + ip;
+			System.out.println(errorMsg);
+			ErrorFrame error = new ErrorFrame(errorMsg);
+			error.setVisible(true);
 		} catch (ConnectException e) {
-			System.out.println("Connection refused from " + ip + ":" + port);
-			System.exit(0);
+			String errorMsg = "Connection refused from " + ip + ":" + port;
+			System.out.println(errorMsg);
+			ErrorFrame error = new ErrorFrame(errorMsg);
+			error.setVisible(true);
 		} catch (SocketTimeoutException e) {
-			System.out.println("Connect timed out");
-			System.exit(0);
+			String errorMsg = "Connect timed out";
+			System.out.println(errorMsg);
+			ErrorFrame error = new ErrorFrame(errorMsg);
+			error.setVisible(true);
 		} catch (IOException e) {
-			System.out.println(e.toString());
-			System.exit(0);
+			String errorMsg = e.toString();
+			System.out.println(errorMsg);
+			ErrorFrame error = new ErrorFrame(errorMsg);
+			error.setVisible(true);
 		}
 	}
 }

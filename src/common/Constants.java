@@ -13,8 +13,11 @@ public class Constants {
 	// Request type
 	public final static String LOGIN = "login";
 	public final static String STARTGAME = "startgame";
+	public final static String REFRESH = "refresh";
 	// ...
 
 	// Data type
 	public final static String USERNAME = "username";
+	public final static String ISUNIQUE = "isunique";
+	public final static String USERLIST = "userlist";
 }

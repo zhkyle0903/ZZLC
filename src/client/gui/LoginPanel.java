@@ -1,11 +1,17 @@
 package client.gui;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import org.json.JSONException;
 
 import client.ClientConnection;
 
@@ -27,17 +33,35 @@ public class LoginPanel extends JPanel {
 		loginButton.setPreferredSize(new Dimension(100, 24));
 		JButton testButton = new JButton("Test (Send msg)");
 		testButton.setPreferredSize(new Dimension(100, 24));
+		JLabel enterUsername = new JLabel("Enter username:");
+		enterUsername.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		enterUsername.setPreferredSize(new Dimension(100, 24));
+		JTextField usernameEntry = new JTextField();
+		usernameEntry.setPreferredSize(new Dimension(100, 24));
+		
 
 		// Add component
 		add(loginButton);
 		add(testButton);
-
+		add(enterUsername);
+		add(usernameEntry);
+		
 		// Add listener
 		loginButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// do something
-				MainFrame.getInstance().login();
+				//create a json package containing request type and username
+				String username = usernameEntry.getText();
+				try {
+				if(ClientConnection.getInstance().tryToLogin(username)==true)
+					MainFrame.getInstance().login();
+				}
+				catch(JSONException | IOException e1)
+				{
+					e1.printStackTrace();
+					ErrorFrame errorWindow = new ErrorFrame(e1.toString());
+					errorWindow.setVisible(true);
+				}
 			}
 		});
 
@@ -45,7 +69,9 @@ public class LoginPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ClientConnection.getInstance().sendMsg("something");
+				
 			}
 		});
 	}
+
 }

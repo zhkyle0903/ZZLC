@@ -67,7 +67,7 @@ public class ClientConnection extends Thread {
 					break;
 				case Constants.REFRESH:
 					//sent a list of online user
-					sendUserList();
+					sendUserlist();
 					break;
 					
 				case Constants.STARTGAME:
@@ -161,7 +161,7 @@ public class ClientConnection extends Thread {
 		}
 	}
 	
-	public void sendUserList() throws JSONException, IOException, SocketException {
+	public void sendUserlist() throws JSONException, IOException, SocketException {
 		//send the list of connected users whose name is not null
 		JSONObject [] userList = new JSONObject[ClientManager.getInstance().getConnectedClients().size()];
 		JsonUtil jsonUtil = new JsonUtil();

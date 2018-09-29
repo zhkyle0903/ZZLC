@@ -32,7 +32,7 @@ public class Client {
 				System.exit(0);
 			}
 		} else {
-			String errorMsg ="Unknown parameters";
+			String errorMsg = "Unknown parameters";
 			System.out.println("errorMsg");
 			ErrorFrame error = new ErrorFrame(errorMsg);
 			error.setVisible(true);
@@ -42,6 +42,8 @@ public class Client {
 			client = new Socket();
 			client.connect(new InetSocketAddress(ip, port), 10000);
 			ClientConnection.getInstance().clientConnected(client);
+			ServerListener serverListener = new ServerListener(client);
+			serverListener.start();
 			MainFrame.getInstance().setVisible(true);
 		} catch (UnknownHostException e) {
 			String errorMsg = "Unknown host: " + ip;

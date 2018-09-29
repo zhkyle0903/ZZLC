@@ -12,7 +12,7 @@ public class Server {
 	public static void main(String[] args) {
 		// Bind a port
 		if (args.length == 0) {
-			port = 8100;
+			port = 8200;
 		} else if (args.length == 1) {
 			try {
 				port = Integer.parseInt(args[0]);
@@ -35,7 +35,6 @@ public class Server {
 				ClientConnection clientConnection = new ClientConnection(clientSocket, count);
 				clientConnection.setName("Thread" + count);
 				clientConnection.start();
-				ClientManager.getInstance().clientConnected(clientConnection);
 			}
 		} catch (BindException e) {
 			System.out.println("Port " + port + " already in use (Bind failed)");

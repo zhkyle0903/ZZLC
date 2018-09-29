@@ -64,4 +64,9 @@ public class MainFrame extends JFrame {
 		revalidate();
 		repaint();
 	}
+	
+	public LobbyPanel getLobbyPanel() {
+		return this.lobbyPanel;
+	}
+	
 }

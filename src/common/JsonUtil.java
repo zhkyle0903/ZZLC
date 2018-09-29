@@ -20,7 +20,6 @@ public class JsonUtil {
 		return result;
 	}
 
-
 	public String getType(String jsonString) {
 		JSONObject jsonObject = new JSONObject(jsonString);
 		return jsonObject.getString(Constants.TYPE);
@@ -29,6 +28,18 @@ public class JsonUtil {
 	public JSONObject getData(String jsonString) {
 		JSONObject jsonObject = new JSONObject(jsonString);
 		return (JSONObject) jsonObject.get(Constants.DATA);
+	}
+
+	//added function
+
+	/**
+	 * return the value in the DATA json
+	 * @param jsonDataObject
+	 * @param key
+	 * @return
+	 */
+	public String returnValueInData(JSONObject jsonDataObject, String key){
+		return jsonDataObject.get(key).toString();
 	}
 
 }

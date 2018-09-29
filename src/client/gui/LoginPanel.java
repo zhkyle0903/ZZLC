@@ -53,13 +53,14 @@ public class LoginPanel extends JPanel {
 				//create a json package containing request type and username
 				String username = usernameEntry.getText();
 				if(isValidUsername(username)==true) {
+					ClientConnection.getInstance().setUsername(username);
 					try {
 						if(ClientConnection.getInstance().tryToLogin(username)==true) {
-							MainFrame.getInstance().login();
+							System.out.println("Trying to log in");
 						}
 						else
 						{
-							ErrorFrame errorWindow = new ErrorFrame("Login Failed: Username is already being used.");
+							ErrorFrame errorWindow = new ErrorFrame("Login Failed: Fail to send log in request.");
 							errorWindow.setVisible(true);
 						}
 					}
@@ -90,7 +91,7 @@ public class LoginPanel extends JPanel {
 	public boolean isValidUsername(String username) {
 		for(int i=0;i<username.length();i++)
 		{
-			if(Character.isDigit(username.charAt(i))||Character.isLetter(username.charAt(i))==false)
+			if((Character.isDigit(username.charAt(i))||Character.isLetter(username.charAt(i)))==false)
 				return false;
 		}
 		return true;
